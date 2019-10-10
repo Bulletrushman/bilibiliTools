@@ -29,7 +29,7 @@ class LoginCollection():
         self.browser.close()
 
 
-    #打开网页输入账户
+    # 打开网页输入账户
     def open(self):
         self.browser.get(self.url)
         email = self.wait.until(EC.presence_of_element_located((By.ID, 'login-username')))
@@ -37,17 +37,17 @@ class LoginCollection():
         email.send_keys(self.email)
         password.send_keys(self.password)
     
-    #点击登录按钮
+    # 点击登录按钮
     def login(self):
         submit = self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'btn-login')))
         submit.click()
         time.sleep(1)
         print('Login do')
         
-    #对验证码图片的相关处理
-    #下载验证码图片
-    #self.save_img('full.jpg', 'geetest_canvas_fullbg')
-    #self.save_img('cut.jpg','geetest_canvas_bg')
+    # 对验证码图片的相关处理
+    # 下载验证码图片
+    # self.save_img('full.jpg', 'geetest_canvas_fullbg')
+    # self.save_img('cut.jpg','geetest_canvas_bg')
     def save_img(self, img_name, class_name):
         # img_name 是保存图片的名字，class_name 是需要保存的canvas的className
         getImgJS = 'return document.getElementsByClassName("' + class_name + '")[0].toDataURL("image/png");'
@@ -86,19 +86,25 @@ class LoginCollection():
         distance -= element.size.get('width') / 2
         distance += 25
 
+        print(distance)
         # 按下鼠标左键
         ActionChains(self.browser).click_and_hold(element).perform()
         time.sleep(0.5)
         while distance > 0:
-            if distance > 10:
+            if distance > 18:
+                span = random.randint(distance/3*2,distance-6)
+            elif distance > 10:
                 # 如果距离大于10，就让他移动快一点
-                span = random.randint(5, 8)
+                span = random.randint(5, 8)              
             else:
                 # 快到缺口了，就移动慢一点
-                span = random.randint(2, 3)
+                span = random.randint(2, 3)          
             ActionChains(self.browser).move_by_offset(span, 0).perform()
             distance -= span
-            time.sleep(random.randint(10, 50) / 100)
+            print(distance)
+            #time.sleep(random.randint(10, 50) / 100)
+            time.sleep(random.randint(10, 15) / 100)
+
 
         ActionChains(self.browser).move_by_offset(distance, 1).perform()
         ActionChains(self.browser).release(on_element=element).perform()
@@ -119,6 +125,8 @@ class LoginCollection():
 
         # 开始移动
         self.start_move(distance)
+
+        
 
 if __name__ == '__main__':
     login = LoginCollection()
