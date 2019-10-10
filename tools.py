@@ -17,6 +17,8 @@ from selenium.webdriver.support import expected_conditions as EC
 ACCOUNT = '123'
 PASSWORD = '123'
 
+
+# 登录集合类
 class LoginCollection():
     def __init__(self):
         self.url = 'https://passport.bilibili.com/login?gourl=https%3A%2F%2Faccount.bilibili.com%2Faccount%2Fbig'
@@ -87,7 +89,7 @@ class LoginCollection():
         distance += 25
 
         print(distance)
-        # 按下鼠标左键
+        # 按下鼠标左键 出现验证失败的情况 在这里调整拖动的随机性
         ActionChains(self.browser).click_and_hold(element).perform()
         time.sleep(0.5)
         while distance > 0:
@@ -104,6 +106,7 @@ class LoginCollection():
             print(distance)
             #time.sleep(random.randint(10, 50) / 100)
             time.sleep(random.randint(10, 15) / 100)
+            #time.sleep(0.1)
 
 
         ActionChains(self.browser).move_by_offset(distance, 1).perform()
@@ -126,7 +129,28 @@ class LoginCollection():
         # 开始移动
         self.start_move(distance)
 
-        
+        # 增加对结果的判定
+        # try:
+        #     WebDriverWait(self.browser, 5, 0.5).until(
+        #         EC.presence_of_element_located((By.XPATH, '//div[@class="geetest_slider geetest_error"]')))
+        #     print("验证失败")
+        #     return
+        # except Exception as e:
+        #     pass
+
+        # # 判断是否验证成功
+        # try:
+        #     WebDriverWait(self.browser, 10, 0.5).until(
+        #         EC.presence_of_element_located((By.XPATH, '//div[@class="geetest_slider geetest_success"]')))
+        # except Exception:
+        #     print("again times")
+        #     self.run()
+        # else:
+        #     print("验证成功")
+
+
+# class commitCollection():
+
 
 if __name__ == '__main__':
     login = LoginCollection()
