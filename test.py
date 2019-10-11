@@ -6,12 +6,13 @@ import gzip
 from io import StringIO
 from io import BytesIO
 from selenium.webdriver.support.wait import WebDriverWait
-
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
 cookielist = [
+{'domain': '.bilibili.com',   'path': '/', 'httpOnly': False, 'name': '',       'secure': False, 'value': ''},
 
 ]
 
@@ -26,7 +27,10 @@ header = {
 #response=urllib.request.urlopen(requests)
 class CommentControll():
     def __init__(self):
-        self.dr=webdriver.Chrome()
+        self.chrome_options = Options()
+        self.chrome_options.add_argument('--headless')
+        self.chrome_options.add_argument('--disable-gpu')
+        self.dr=webdriver.Chrome(chrome_options=self.chrome_options)
         self.wait = WebDriverWait(self.dr,20)
 
     def testopenandcomment(self,url):#评论测试用
@@ -49,13 +53,11 @@ class CommentControll():
     def comment(self):
         js = "var action=document.documentElement.scrollTop=10000"  # 刷新出评论元素
         self.dr.execute_script(js)
-        #time.sleep(4)
-        #textarea = self.dr.find_element_by_name("msg")
         textarea = self.wait.until(EC.presence_of_element_located((By.NAME,'msg')))
         js4 = "arguments[0].scrollIntoView();"
         self.dr.execute_script(js4, textarea)
         textarea.clear()
-        textarea.send_keys('')
+        textarea.send_keys('先评后看')
         button = self.dr.find_element_by_xpath('//button[@class="comment-submit"]')
         button.click()
 
@@ -65,9 +67,9 @@ class CommentControll():
             self.dr.add_cookie(each_cookie)
         self.dr.refresh()
         time.sleep(2)
+        requests = urllib.request.Request(url, headers=header)
         while True:
             try:
-                requests = urllib.request.Request(url, headers=header)
                 stat = urllib.request.urlopen(requests)#判断页面是否存在
             except:
                 print('还没更新')
@@ -79,7 +81,7 @@ class CommentControll():
         # nextnumber.click()
 
 if __name__=='__main__':
-    url='https://www.bilibili.com/bangumi/play/ep285481'
+    url='https://www.bilibili.com/bangumi/play/ep285752'
     comm = CommentControll()
     #comm.testopenandcomment(url=url)
     comm.moniter(url)
