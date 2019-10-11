@@ -39,7 +39,8 @@ def auto_comment(oid, message, cookie):
     try:
         request = urllib.request.Request(url,headers=headers,data=postdata)
         response = opener.open(request)
-        print(response.reason)
+        print('响应描述:' + response.reason)
+        print('响应体:'+response.read().decode('UTF-8'))
     except urllib.error.URLError as e:
         if hasattr(e,'code'):
             print(e.code)
@@ -49,7 +50,7 @@ def auto_comment(oid, message, cookie):
 
 
 auto_comment(
-    70781027,
-    '哈哈哈哈我来了',
+    70489202,
+    '哇！好棒',
     ''
 )
