@@ -8,6 +8,12 @@ import time
 from bs4 import BeautifulSoup
 import urllib.request
 import requests
+from selenium import webdriver
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
 cookie = ''
 
@@ -34,7 +40,7 @@ def auto_comment(oid, message, cookie):
         'message': message,
         'plat': '1',
         'jsonp': 'jsonp',
-        'csrf': 'e7e3a6578428e434258a4e7d62127212'
+        'csrf': '4522ea4398f5da9f405ccdef95a41b87'  # 本机重置
     }
 
     postdata = urllib.parse.urlencode(comment).encode('utf-8')
@@ -44,7 +50,7 @@ def auto_comment(oid, message, cookie):
     try:
         request = urllib.request.Request(url, headers=headers, data=postdata)
         response = opener.open(request)
-        print(response.reason)
+        #print(response.reason)
 
         print('响应描述:' + response.reason)
         print('响应体:' + response.read().decode('UTF-8'))
@@ -56,24 +62,45 @@ def auto_comment(oid, message, cookie):
             print(e.reason)
 
 
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-gpu')
+driver = webdriver.Chrome(chrome_options=chrome_options);
+
+def getUrlId(url):
+    # req = requests.get(url)
+    # html = req.text
+    driver.get(url)
+    html = driver.page_source
+    bf = BeautifulSoup(html, 'lxml')
+    text = bf.find_all('a', class_='av-link')
+    avnumber = text[0].text
+    number = avnumber[2:len(avnumber)]
+    return number
+
+
+
 if __name__ == '__main__':
 
-    url = 'https://www.bilibili.com/bangumi/play/ep285752'
+    # url = 'https://www.bilibili.com/bangumi/play/ep285753'
+    url = 'https://www.bilibili.com/bangumi/play/ss28627'
+    oldId = '69061916'
     while True:
         try:
             stat = urllib.request.urlopen(url)  # 判断页面是否存在
+            # while(True):
+            #     print(getUrlId(url))
+            #     if(getUrlId(url) != oldId):
+            #         break
+            #     time.sleep(1)
         except:
             print('还没更新')
+            time.sleep(1) #循环判定链接的时候 频率调整
         else:
-            req = requests.get(url)
-            html = req.text
-            bf = BeautifulSoup(html, 'lxml')
-            text = bf.find_all('a', class_='av-link')
-            avnumber = text[0].text
-            number = avnumber[2:len(avnumber)]
-            auto_comment(
-                number,
-                'ccc',
-                ''
-            )
+            print(getUrlId(url))
+            # auto_comment(
+            #     number,
+            #     '冲第一',
+            #     ''
+            # )
             break
