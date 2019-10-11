@@ -8,6 +8,7 @@ import time
 from bs4 import BeautifulSoup
 import urllib.request
 import requests
+import datetime
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
@@ -32,7 +33,7 @@ def auto_comment(oid, message, cookie):
         'Host': 'api.bilibili.com',
         'Origin': 'https://www.bilibili.com',
         # 视频类型在这里修改
-        'Referer': 'https://www.bilibili.com/bangumi/play/ep285752',  # 动态时候使用 oid
+        'Referer': 'https://www.bilibili.com/bangumi/play/ep285799',  # 动态时候使用 oid
         # 'Referer': 'https://www.bilibili.com/video/av'+oid+'/?spm_id_from=333.334.home_popularize.3',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36'
     }
@@ -44,7 +45,7 @@ def auto_comment(oid, message, cookie):
         'message': message,
         'plat': '1',
         'jsonp': 'jsonp',
-        'csrf': '4522ea4398f5da9f405ccdef95a41b87'  # 本机重置
+        'csrf': '39da25dd3969010c6c3b3fedeb0abf58'  # 本机重置
     }
 
     postdata = urllib.parse.urlencode(comment).encode('utf-8')
@@ -66,6 +67,7 @@ def auto_comment(oid, message, cookie):
             print(e.reason)
 
 # 暂时使用自动化的库来处理第一集的AVID
+# 需要容错这一块ID的爬取
 def getUrlId(url):
     # req = requests.get(url)
     # html = req.text
@@ -79,8 +81,9 @@ def getUrlId(url):
 
 if __name__ == '__main__':
     print('预加载完毕')
-    # url = 'https://www.bilibili.com/bangumi/play/ep285753'
-    url = 'https://www.bilibili.com/bangumi/play/ss28627'
+    url = 'https://www.bilibili.com/bangumi/play/ep285799'
+    
+    # url = 'https://www.bilibili.com/bangumi/play/ep285752' #test
     oldId = '69061916'
     while True:
         try:
@@ -91,13 +94,27 @@ if __name__ == '__main__':
             #         break
             #     time.sleep(1)
         except:
-            print('还没更新')
-            time.sleep(1) #循环判定链接的时候 频率调整
+            x = 1
+            # print(str(datetime.datetime.now()) + ' 当前链接番剧内容未更新...')
+            # time.sleep(0.5) #循环判定链接的时候 频率调整
         else:
-            print(getUrlId(url))
-            # auto_comment(
-            #     number,
-            #     '冲第一',
-            #     ''
-            # )
+            number = getUrlId(url)
+            auto_comment(
+                number,
+                '来了来了我来了',
+                ''
+            )
+            #快速补发
+            auto_comment(
+                number,
+                '来了来了我来了',
+                ''
+            )
+            #快速补发
+            auto_comment(
+                number,
+                '来了来了我来了',
+                ''
+            )
+            
             break
