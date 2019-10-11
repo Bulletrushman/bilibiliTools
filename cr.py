@@ -15,7 +15,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
-cookie = ''
+# 预加载内容
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-gpu')
+driver = webdriver.Chrome(chrome_options=chrome_options);
 
 
 def auto_comment(oid, message, cookie):
@@ -61,12 +65,7 @@ def auto_comment(oid, message, cookie):
         if hasattr(e,'reason'):
             print(e.reason)
 
-
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--disable-gpu')
-driver = webdriver.Chrome(chrome_options=chrome_options);
-
+# 暂时使用自动化的库来处理第一集的AVID
 def getUrlId(url):
     # req = requests.get(url)
     # html = req.text
@@ -78,10 +77,8 @@ def getUrlId(url):
     number = avnumber[2:len(avnumber)]
     return number
 
-
-
 if __name__ == '__main__':
-
+    print('预加载完毕')
     # url = 'https://www.bilibili.com/bangumi/play/ep285753'
     url = 'https://www.bilibili.com/bangumi/play/ss28627'
     oldId = '69061916'
