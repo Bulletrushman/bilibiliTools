@@ -9,6 +9,7 @@ Libs
 2.PIL(pillow)  
 3.Beautifulsoup4  
 4.requests  
+5.lxml  
 
 Others  
 1.chromedriver   
