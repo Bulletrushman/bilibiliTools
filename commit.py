@@ -3,7 +3,8 @@ import json
 import random
 import os
 
-#av_id=input('please input av_id   ')  # 视频号
+# 该文件内容已经集成到tool.py
+# av_id=input('please input av_id   ')  # 视频号
 av_id = 26605386
 
 r=requests.get(
