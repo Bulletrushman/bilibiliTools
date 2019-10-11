@@ -4,7 +4,7 @@ Version:
 Pyhton 3.7  
 Google Browser 77   
 
-Libs
+Libs  
 1.selenium  
 2.PIL(pillow)  
 3.Beautifulsoup4  
