@@ -42,8 +42,8 @@ def auto_comment(oid, message, cookie):
         print('响应描述:' + response.reason)
         print('响应体:'+response.read().decode('UTF-8'))
     except urllib.error.URLError as e:
-        if hasattr(e,'code'):
-            print(e.code)
+        # if hasattr(e,'code'):
+        #     print(e.code)
         if hasattr(e,'reason'):
             print(e.reason)
 
@@ -53,4 +53,5 @@ auto_comment(
     70489202,
     '哇！好棒',
     ''
+
 )
