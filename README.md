@@ -8,6 +8,7 @@ Libs
 1.selenium  
 2.PIL(pillow)  
 3.Beautifulsoup4  
+4.requests  
 
 Others  
 1.chromedriver   
