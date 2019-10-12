@@ -67,7 +67,10 @@ def auto_getAid(ssID, typeID):
             result = requests.get(buildUrl)
         except:
 <<<<<<< HEAD:auto_commit.py
+<<<<<<< HEAD:auto_commit.py
             print(time_out() + 'Network error try again...')
+=======
+>>>>>>> parent of deba5e0... fixed bug:cr.py
 =======
 >>>>>>> parent of deba5e0... fixed bug:cr.py
             time.sleep(0.1)
@@ -93,8 +96,11 @@ def auto_getAid(ssID, typeID):
 def is_update(oldIndex, arr):
     if len(arr) <= oldIndex:
 <<<<<<< HEAD:auto_commit.py
+<<<<<<< HEAD:auto_commit.py
         print(time_out() + 'The video has not been updated yet.')
 =======
+=======
+>>>>>>> parent of deba5e0... fixed bug:cr.py
         print(len(arr))
         print('Not Update')
 >>>>>>> parent of deba5e0... fixed bug:cr.py
@@ -116,6 +122,7 @@ def main_run(ssID, type_tig, nums, commit_str, cookie, csrf):
             arr = auto_getAid(ssID, type_tig)
 
 <<<<<<< HEAD:auto_commit.py
+<<<<<<< HEAD:auto_commit.py
 def time_out():
     return 'Log：' + time.strftime('%H:%M:%S',time.localtime(time.time())) + ' '
 
@@ -132,6 +139,12 @@ if __name__ == '__main__':
     print('-----Preloading completed-----')
     
     main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times)
+=======
+
+if __name__ == '__main__':
+    print('-----预加载完毕-----')
+    
+>>>>>>> parent of deba5e0... fixed bug:cr.py
 =======
 
 if __name__ == '__main__':
