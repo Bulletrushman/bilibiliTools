@@ -66,12 +66,11 @@ def auto_getAid(ssID, typeID):
         try:
             result = requests.get(buildUrl)
         except:
+            print('Network error try again...')
             time.sleep(0.1)
         else:
             break
-    time.sleep(0.1)
     result = requests.get(buildUrl)
-    
     # 处理json数据
     data = json.loads(result.text)
     arr = []
@@ -83,27 +82,35 @@ def auto_getAid(ssID, typeID):
 # 传入参数 当前已有集数 从接口获取的ID数组
 def is_update(oldIndex, arr):
     if len(arr) <= oldIndex:
-        print(len(arr))
         print('Not Update')
         return False
     else:
         return True
 
-#SS开头ID 番剧类型(Ch:1  Jp:4) 容错次数 评论内容 
+#SS开头ID 番剧类型(Ch:1  Jp:4) 当前已有集数 评论内容 登录cookie 本机csrf 容错次数
 #注意设置本机csrf
-def main_run(ssID, type_tig, nums, commit_str, cookie, csrf):
+def main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times):
     while True:
         arr = auto_getAid(ssID, type_tig)
         if is_update(nums, arr):
-            for i in range(0, 3):
+            for i in range(0, times):
                 auto_comment(arr[len(arr)-1], commit_str, cookie, csrf)
+                i = i + 1
                 time.sleep(0.1)  
             break
         else:
             arr = auto_getAid(ssID, type_tig)
 
+#param
+ssID = '26777'
+type_tig = 1
+nums = 14
+commit_str = 'Come to see'
+cookie = ''
+csrf = '4522ea4398f5da9f405ccdef95a41b87'
+times= 3
 
 if __name__ == '__main__':
-    print('-----预加载完毕-----')
-    
+    print('-----Preloading completed-----')
+    main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times)
     
