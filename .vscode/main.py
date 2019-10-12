@@ -61,7 +61,7 @@ class LoginCollection():
         submit = self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'btn-login')))
         submit.click()
         time.sleep(1)
-        print('Login do')
+        print(time_out() + 'Auto login do')
         
     # 对验证码图片的相关处理
     # 下载验证码图片
@@ -72,7 +72,7 @@ class LoginCollection():
         getImgJS = 'return document.getElementsByClassName("' + class_name + '")[0].toDataURL("image/png");'
         img = self.browser.execute_script(getImgJS)
         base64_data_img = img[img.find(',') + 1:]
-        print("get img")
+        print(time_out() + "Get img")
         image_base = base64.b64decode(base64_data_img)
         file = open(img_name, 'wb')
         file.write(image_base)
@@ -105,7 +105,7 @@ class LoginCollection():
         distance -= element.size.get('width') / 2
         distance += 25
 
-        print(distance)
+        print(time_out() + '滑动图块-' + str(distance))
         # 按下鼠标左键 出现验证失败的情况 在这里调整拖动的随机性
         ActionChains(self.browser).click_and_hold(element).perform()
         time.sleep(0.5)
@@ -120,7 +120,7 @@ class LoginCollection():
                 span = random.randint(2, 3)          
             ActionChains(self.browser).move_by_offset(span, 0).perform()
             distance -= span
-            print(distance)
+            print(time_out() + '滑动图块-' + str(distance))
             #time.sleep(random.randint(10, 50) / 100)
             time.sleep(random.randint(10, 15) / 100)
             #time.sleep(0.1)
@@ -145,32 +145,37 @@ class LoginCollection():
 
         # 开始移动
         self.start_move(distance)
-
         time.sleep(5)
+        try:
+            WebDriverWait(self.browser, 5, 0.5).until(
+                EC.presence_of_element_located((By.XPATH, '//div[@class="geetest_slider geetest_error"]')))
+            print(time_out() + "Login error")
+            return
+        except Exception as e:
+            pass
+
+        print(time_out() + 'Try to get the cookie')
         self.browser.get('https://api.bilibili.com/x/v2/reply/add')
-        time.sleep(3)
-        #设定10s后读取cookie
+        time.sleep(2)   
+        # 自动化登陆后 获取cookie和csrf加密串
         cookies = self.browser.get_cookies()
         jsonCookies = json.loads(json.dumps(cookies))
         result = ''
+        csrf = ''
         for cookie in jsonCookies:
             result = result + cookie["name"] + '=' + cookie["value"] + ";"
-        print(result)
+            if cookie["name"] == "bili_jct":
+                csrf = cookie["value"]
+        print(time_out() + str(result))
 
-        json_str = json.dumps(cookies)
-        with open('cookies.json', 'w') as f:
-            f.write(json_str)
-        print('Downlaod the cookie')
-        time.sleep(100)
-        return result[0:len(result)-1]
+        # json_str = json.dumps(cookies)
+        # with open('cookies.json', 'w') as f:
+        #     f.write(json_str)
+        print(time_out() + 'Get the cookie successful')
+        
+        return result[0:len(result)-1],csrf
         # 增加对结果的判定
-        # try:
-        #     WebDriverWait(self.browser, 5, 0.5).until(
-        #         EC.presence_of_element_located((By.XPATH, '//div[@class="geetest_slider geetest_error"]')))
-        #     print("验证失败")
-        #     return
-        # except Exception as e:
-        #     pass
+        
 
         # # 判断是否验证成功
         # try:
@@ -332,17 +337,15 @@ def time_out():
 # 现在参数在这里设置
 ssID = '26777'
 type_tig = 4
-nums = 0
+nums = 16
 commit_str = 'Come to see'
-# csrf = '7e198f779af88aca590f26cd2f211f56'
-csrf = '7dbfc12d33219e3deba41427209ff470'
 times= 3
 
 
 if __name__ == '__main__': 
     # 预准备内容 
     Login = LoginCollection()
-    cookie = Login.run()
+    cookie,csrf = Login.run()
     time.sleep(5)
     # print('-----Preloading completed-----')
     
