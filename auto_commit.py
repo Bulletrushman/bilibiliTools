@@ -66,11 +66,16 @@ def auto_getAid(ssID, typeID):
         try:
             result = requests.get(buildUrl)
         except:
+<<<<<<< HEAD:auto_commit.py
             print(time_out() + 'Network error try again...')
+=======
+>>>>>>> parent of deba5e0... fixed bug:cr.py
             time.sleep(0.1)
         else:
             break
+    time.sleep(0.1)
     result = requests.get(buildUrl)
+    
     # 处理json数据
     data = json.loads(result.text)
     arr = []
@@ -87,25 +92,30 @@ def auto_getAid(ssID, typeID):
 # 传入参数 当前已有集数 从接口获取的ID数组
 def is_update(oldIndex, arr):
     if len(arr) <= oldIndex:
+<<<<<<< HEAD:auto_commit.py
         print(time_out() + 'The video has not been updated yet.')
+=======
+        print(len(arr))
+        print('Not Update')
+>>>>>>> parent of deba5e0... fixed bug:cr.py
         return False
     else:
         return True
 
-#SS开头ID 番剧类型(Ch:1  Jp:4) 当前已有集数 评论内容 登录cookie 本机csrf 容错次数
+#SS开头ID 番剧类型(Ch:1  Jp:4) 容错次数 评论内容 
 #注意设置本机csrf
-def main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times):
+def main_run(ssID, type_tig, nums, commit_str, cookie, csrf):
     while True:
         arr = auto_getAid(ssID, type_tig)
         if is_update(nums, arr):
-            for i in range(0, times):
+            for i in range(0, 3):
                 auto_comment(arr[len(arr)-1], commit_str, cookie, csrf)
-                i = i + 1
                 time.sleep(0.1)  
             break
         else:
             arr = auto_getAid(ssID, type_tig)
 
+<<<<<<< HEAD:auto_commit.py
 def time_out():
     return 'Log：' + time.strftime('%H:%M:%S',time.localtime(time.time())) + ' '
 
@@ -122,4 +132,10 @@ if __name__ == '__main__':
     print('-----Preloading completed-----')
     
     main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times)
+=======
+
+if __name__ == '__main__':
+    print('-----预加载完毕-----')
+    
+>>>>>>> parent of deba5e0... fixed bug:cr.py
     
