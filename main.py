@@ -44,8 +44,8 @@ class LoginCollection():
         self.email = ACCOUNT
         self.password = PASSWORD
 
-    def __del__(self):
-        self.browser.close()
+    # def __del__(self):
+    #     self.browser.close()
 
 
     # 打开网页输入账户
@@ -172,7 +172,7 @@ class LoginCollection():
         # with open('cookies.json', 'w') as f:
         #     f.write(json_str)
         print(time_out() + 'Get the cookie successful')
-        
+        self.browser.close()
         return result[0:len(result)-1],csrf
         # 增加对结果的判定
         
@@ -337,7 +337,7 @@ def time_out():
 # 现在参数在这里设置
 ssID = '26777'
 type_tig = 4
-nums = 16
+nums = 0
 commit_str = 'Come to see'
 times= 3
 
