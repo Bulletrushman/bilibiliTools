@@ -114,7 +114,7 @@ ssID = '28623'
 type_tig = 4
 nums = 0
 commit_str = 'Come to see'
-cookie = '_uuid=C2107FB1-65E0-5EEC-4589-932DE8DFC5E802426infoc; buvid3=F44AAE80-A76A-4676-8FE8-54419037FD9E190953infoc; LIVE_BUVID=AUTO6015707592026342; sid=j219dblq; DedeUserID=64253258; DedeUserID__ckMd5=95fd05df9377892e; SESSDATA=e695ac4b%2C1573351218%2C03dca6a1; bili_jct=4522ea4398f5da9f405ccdef95a41b87; CURRENT_FNVAL=16; bp_t_offset_64253258=308770881155279719; im_notify_type_64253258=0; finger=3f3919d0; stardustvideo=1; rpdid=|(umRR)~YmRu0J\'ul~|~~||)k; UM_distinctid=16db93db21f46e-0f5b01aa467817-b363e65-1fa400-16db93db220d6a; stardustpgcv=0606'
+cookie = ''
 csrf = '4522ea4398f5da9f405ccdef95a41b87'
 times= 3
 
