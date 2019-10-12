@@ -44,8 +44,8 @@ def auto_comment(oid, message, cookie, csrf):
         response = opener.open(request)
         #print(response.reason)
 
-        print('响应描述:' + response.reason)
-        print('响应体:' + response.read().decode('UTF-8'))
+        print(time_out() + 'Response code:' + response.reason)
+        print(time_out() + 'Response text:' + response.read().decode('UTF-8'))
 
     except urllib.error.URLError as e:
         # if hasattr(e,'code'):
@@ -66,7 +66,7 @@ def auto_getAid(ssID, typeID):
         try:
             result = requests.get(buildUrl)
         except:
-            print('Network error try again...')
+            print(time_out() + 'Network error try again...')
             time.sleep(0.1)
         else:
             break
@@ -74,15 +74,20 @@ def auto_getAid(ssID, typeID):
     # 处理json数据
     data = json.loads(result.text)
     arr = []
-    for i in data["result"]["main_section"]["episodes"]:
-        arr.append(i["aid"])
+    try:
+        for i in data["result"]["main_section"]["episodes"]:
+            arr.append(i["aid"])
+    except:
+        print(time_out() + 'The video has not been released yet.')
+
+    #print(arr)
     return arr
     
 # 通过番剧集数判定是否更新
 # 传入参数 当前已有集数 从接口获取的ID数组
 def is_update(oldIndex, arr):
     if len(arr) <= oldIndex:
-        print('Not Update')
+        print(time_out() + 'The video has not been updated yet.')
         return False
     else:
         return True
@@ -101,16 +106,20 @@ def main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times):
         else:
             arr = auto_getAid(ssID, type_tig)
 
+def time_out():
+    return 'Log：' + time.strftime('%H:%M:%S',time.localtime(time.time())) + ' '
+
 #param
-ssID = '26777'
-type_tig = 1
-nums = 14
+ssID = '28623'
+type_tig = 4
+nums = 0
 commit_str = 'Come to see'
-cookie = ''
+cookie = '_uuid=C2107FB1-65E0-5EEC-4589-932DE8DFC5E802426infoc; buvid3=F44AAE80-A76A-4676-8FE8-54419037FD9E190953infoc; LIVE_BUVID=AUTO6015707592026342; sid=j219dblq; DedeUserID=64253258; DedeUserID__ckMd5=95fd05df9377892e; SESSDATA=e695ac4b%2C1573351218%2C03dca6a1; bili_jct=4522ea4398f5da9f405ccdef95a41b87; CURRENT_FNVAL=16; bp_t_offset_64253258=308770881155279719; im_notify_type_64253258=0; finger=3f3919d0; stardustvideo=1; rpdid=|(umRR)~YmRu0J\'ul~|~~||)k; UM_distinctid=16db93db21f46e-0f5b01aa467817-b363e65-1fa400-16db93db220d6a; stardustpgcv=0606'
 csrf = '4522ea4398f5da9f405ccdef95a41b87'
 times= 3
 
 if __name__ == '__main__':
     print('-----Preloading completed-----')
+    
     main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times)
     
