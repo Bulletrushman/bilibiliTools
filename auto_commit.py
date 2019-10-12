@@ -7,8 +7,12 @@ import json
 import time
 from bs4 import BeautifulSoup
 import urllib.request
+from urllib import request
+from http import cookiejar
 import requests
 import datetime
+
+
 
 def auto_comment(oid, message, cookie, csrf):
     headers = {
@@ -109,17 +113,31 @@ def main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times):
 def time_out():
     return 'Log：' + time.strftime('%H:%M:%S',time.localtime(time.time())) + ' '
 
+def read_cookie_fromjson():
+    with open('cookies.json', 'r', encoding='utf-8') as f:
+        listCookies = json.loads(f.read())
+    result = ''
+    for cookie in listCookies:
+        result = result + cookie["name"] + '=' + cookie["value"] + ";"
+    # 去除尾部的多余符号
+    result = result[0:len(result)-1]
+    print(result)
+    return result
+
+
+
 #param
-ssID = '28623'
+ssID = '26777'
 type_tig = 4
 nums = 0
 commit_str = 'Come to see'
-cookie = ''
-csrf = '4522ea4398f5da9f405ccdef95a41b87'
+# csrf = '7e198f779af88aca590f26cd2f211f56'
+csrf = '7dbfc12d33219e3deba41427209ff470'
 times= 3
 
 if __name__ == '__main__':
     print('-----Preloading completed-----')
     
-    main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times)
+    main_run(ssID, type_tig, nums, commit_str, read_cookie_fromjson(), csrf, times)
+    
     
