@@ -234,7 +234,7 @@ def commit(av_id):
 请求处理相关模块
 '''
 
-def auto_comment(oid, message, cookie, csrf):
+def auto_comment(oid, message, cookie, csrf, epid):
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
         'Accept-Encoding': 'gzip, deflate, br',
@@ -244,10 +244,11 @@ def auto_comment(oid, message, cookie, csrf):
         'Host': 'api.bilibili.com',
         'Origin': 'https://www.bilibili.com',
         # 视频类型在这里修改
-        'Referer': 'https://www.bilibili.com/bangumi/play/ep' + str(oid),  # 动态时候使用 oid
+        'Referer': 'https://www.bilibili.com/bangumi/play/ep' + str(epid),  # 动态时候使用 oid
         # 'Referer': 'https://www.bilibili.com/video/av'+oid+'/?spm_id_from=333.334.home_popularize.3',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36'
     }
+    print(time_out() + 'Headers:' + str(headers))
 
     url = 'https://api.bilibili.com/x/v2/reply/add'
     comment = {
@@ -298,14 +299,16 @@ def auto_getAid(ssID, typeID):
     # 处理json数据
     data = json.loads(result.text)
     arr = []
+    epidarr = []
     try:
         for i in data["result"]["main_section"]["episodes"]:
             arr.append(i["aid"])
+            epidarr.append(i["id"])
     except:
         print(time_out() + 'The video has not been released yet.')
 
     #print(arr)
-    return arr
+    return arr,epidarr
     
 # 通过番剧集数判定是否更新
 # 传入参数 当前已有集数 从接口获取的ID数组
@@ -320,10 +323,10 @@ def is_update(oldIndex, arr):
 #注意设置本机csrf
 def main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times):
     while True:
-        arr = auto_getAid(ssID, type_tig)
+        arr,epidarr = auto_getAid(ssID, type_tig)
         if is_update(nums, arr):
             for i in range(0, times):
-                auto_comment(arr[len(arr)-1], commit_str, cookie, csrf)
+                auto_comment(arr[len(arr)-1], commit_str, cookie, csrf, epidarr[len(epidarr)-1])
                 i = i + 1
                 time.sleep(0.1)  
             break
@@ -335,10 +338,10 @@ def time_out():
 
 
 # 现在参数在这里设置
-ssID = '26777'
-type_tig = 4
-nums = 0
-commit_str = 'Come to see'
+ssID = '28320'
+type_tig = 1
+nums = 2
+commit_str = '来了来了来了'
 times= 3
 
 
@@ -347,7 +350,7 @@ if __name__ == '__main__':
     Login = LoginCollection()
     cookie,csrf = Login.run()
     time.sleep(5)
-    # print('-----Preloading completed-----')
+    print('-----Preloading completed-----')
     
     
     main_run(ssID, type_tig, nums, commit_str, cookie, csrf, times)
