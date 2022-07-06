@@ -16,3 +16,8 @@ Others
 
 TIP:  
 1.Do not use Python 2+.There will be scrambling problems.  
+
+功能:
+自动登录
+秒发评论
+抢楼占楼
